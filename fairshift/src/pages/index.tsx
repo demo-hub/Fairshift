@@ -1,10 +1,22 @@
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import styles from "./index.module.css";
 
 const Home: NextPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       <Head>
@@ -18,19 +30,33 @@ const Home: NextPage = () => {
             Fair<span className={styles.pinkSpan}>Shift</span>
           </h1>
           <div className={styles.cardRow}>
-            <Link
-              className={styles.card}
-              href="https://create.t3.gg/en/usage/first-steps"
-            >
+            <div className={styles.card} onClick={onOpen}>
               <h3 className={styles.cardTitle}>Generate schedule →</h3>
               <div className={styles.cardText}>
                 Automatic schedule generation based on your preferences.
               </div>
-            </Link>
+            </div>
           </div>
           <div className={styles.showcaseContainer}>
             <AuthShowcase />
           </div>
+
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Modal Title</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <p>Test</p>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="purple" mr={3} onClick={onClose}>
+                  Generate
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </div>
       </main>
     </>
