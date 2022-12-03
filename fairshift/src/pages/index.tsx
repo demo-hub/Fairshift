@@ -7,15 +7,34 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import styles from "./index.module.css";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
+    defaultValues: {
+      employees: 1,
+    },
+  });
+  const onSubmit = (data: FieldValues) => console.log(data);
 
   return (
     <>
@@ -44,14 +63,47 @@ const Home: NextPage = () => {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Modal Title</ModalHeader>
+              <ModalHeader>Settings</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <p>Test</p>
+                <Stack spacing={3}>
+                  <span>
+                    <Text mb="8px">Number of employees</Text>
+                    <Controller
+                      name="employees"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <NumberInput
+                          focusBorderColor="purple.500"
+                          errorBorderColor="red.500"
+                          isInvalid={!!errors.employees}
+                          {...field}
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                      )}
+                    />
+                    <span>
+                      {errors.employees
+                        ? errors.employees?.message?.toString()
+                        : undefined}
+                    </span>
+                  </span>
+                </Stack>
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="purple" mr={3} onClick={onClose}>
+                <Button
+                  type="submit"
+                  colorScheme="purple"
+                  mr={3}
+                  onClick={handleSubmit(onSubmit)}
+                >
                   Generate
                 </Button>
               </ModalFooter>
