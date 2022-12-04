@@ -20,9 +20,9 @@ import { trpc } from "../utils/trpc";
 import styles from "./settings.module.css";
 
 type Settings = {
-  employees: number;
-  shifts: number;
-  hours: number;
+  totalEmployees: number;
+  shiftsPerDay: number;
+  hoursPerShift: number;
   employeesPerShift: number;
 };
 
@@ -38,9 +38,9 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
     control,
   } = useForm<Settings>({
     defaultValues: {
-      employees: 1,
-      shifts: 1,
-      hours: 1,
+      totalEmployees: 1,
+      shiftsPerDay: 1,
+      hoursPerShift: 1,
       employeesPerShift: 1,
     },
   });
@@ -48,10 +48,11 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const mutation = trpc.shift.generateShifts.useMutation();
 
   const onSubmit = async (data: Settings) => {
+    console.log(data);
     const mutationData = await mutation.mutateAsync({
-      employees: parseInt(data.employees.toString()),
-      shifts: parseInt(data.shifts.toString()),
-      hours: parseInt(data.hours.toString()),
+      totalEmployees: parseInt(data.totalEmployees.toString()),
+      shiftsPerDay: parseInt(data.shiftsPerDay.toString()),
+      hoursPerShift: parseInt(data.hoursPerShift.toString()),
       employeesPerShift: parseInt(data.employeesPerShift.toString()),
     });
 
@@ -70,14 +71,14 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <span>
                 <Text mb="8px">Employees</Text>
                 <Controller
-                  name="employees"
+                  name="totalEmployees"
                   control={control}
                   rules={{ required: true, min: 1 }}
                   render={({ field }) => (
                     <NumberInput
                       focusBorderColor="purple.500"
                       errorBorderColor="red.500"
-                      isInvalid={!!errors.employees}
+                      isInvalid={!!errors.totalEmployees}
                       min={1}
                       {...field}
                     >
@@ -90,8 +91,8 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
                 <span>
-                  {errors.employees
-                    ? errors.employees?.message?.toString()
+                  {errors.totalEmployees
+                    ? errors.totalEmployees?.message?.toString()
                     : undefined}
                 </span>
               </span>
@@ -128,14 +129,14 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <span>
                 <Text mb="8px">Hours per shift</Text>
                 <Controller
-                  name="hours"
+                  name="hoursPerShift"
                   control={control}
                   rules={{ required: true, min: 1 }}
                   render={({ field }) => (
                     <NumberInput
                       focusBorderColor="purple.500"
                       errorBorderColor="red.500"
-                      isInvalid={!!errors.hours}
+                      isInvalid={!!errors.hoursPerShift}
                       min={1}
                       {...field}
                     >
@@ -148,20 +149,22 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
                 <span>
-                  {errors.hours ? errors.hours?.message?.toString() : undefined}
+                  {errors.hoursPerShift
+                    ? errors.hoursPerShift?.message?.toString()
+                    : undefined}
                 </span>
               </span>
               <span>
                 <Text mb="8px">Shifts per day</Text>
                 <Controller
-                  name="shifts"
+                  name="shiftsPerDay"
                   control={control}
                   rules={{ required: true, min: 1 }}
                   render={({ field }) => (
                     <NumberInput
                       focusBorderColor="purple.500"
                       errorBorderColor="red.500"
-                      isInvalid={!!errors.shifts}
+                      isInvalid={!!errors.shiftsPerDay}
                       min={1}
                       {...field}
                     >
@@ -174,8 +177,8 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   )}
                 />
                 <span>
-                  {errors.shifts
-                    ? errors.shifts?.message?.toString()
+                  {errors.shiftsPerDay
+                    ? errors.shiftsPerDay?.message?.toString()
                     : undefined}
                 </span>
               </span>

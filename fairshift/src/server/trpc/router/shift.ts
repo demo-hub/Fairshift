@@ -7,9 +7,9 @@ export const shiftRouter = router({
   generateShifts: publicProcedure
     .input(
       z.object({
-        employees: z.number(),
-        shifts: z.number(),
-        hours: z.number(),
+        totalEmployees: z.number(),
+        shiftsPerDay: z.number(),
+        hoursPerShift: z.number(),
         employeesPerShift: z.number(),
       })
     )

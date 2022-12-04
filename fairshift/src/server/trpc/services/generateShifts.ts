@@ -1,79 +1,54 @@
 type Props = {
-  employees: number;
-  shifts: number;
-  hours: number;
+  totalEmployees: number;
+  shiftsPerDay: number;
+  hoursPerShift: number;
   employeesPerShift: number;
 };
 
 type Shift = {
   employee: number;
-  shifts: {
-    shift: number;
-    hours: {
-      hour: number;
-      employeesPerShift: (number | undefined)[];
-    }[];
-  }[];
+  dayOfWeek: number;
+  shiftNumber: number;
+  hours: number;
 };
 
 // Function to generate shifts for a week based on the given parameters
 const generateShifts = async ({
-  employees,
-  shifts,
-  hours,
+  totalEmployees,
+  shiftsPerDay,
+  hoursPerShift,
   employeesPerShift,
 }: Props): Promise<Shift[]> => {
-  // Create an array of employees
-  const employeeArray = Array.from(Array(employees).keys());
+  // Check that the inputs are valid
+  if (
+    totalEmployees <= 0 ||
+    shiftsPerDay <= 0 ||
+    hoursPerShift <= 0 ||
+    employeesPerShift <= 0
+  ) {
+    return [];
+  }
 
-  // Create an array of shifts
-  const shiftArray = Array.from(Array(shifts).keys());
+  // Calculate the total number of shifts in a week
+  const totalShifts = shiftsPerDay * 7;
 
-  // Create an array of hours
-  const hourArray = Array.from(Array(hours).keys());
-
-  // Create an array of employees per shift
-  const employeesPerShiftArray = Array.from(Array(employeesPerShift).keys());
-
-  // Create an array of shifts for each employee
-  const employeeShifts = employeeArray.map((employee) => {
-    // Create an array of shifts for each employee
-    const shifts = shiftArray.map((shift) => {
-      // Create an array of hours for each shift
-      const hours = hourArray.map((hour) => {
-        // Create an array of employees per shift for each hour
-        const employeesPerShift = employeesPerShiftArray.map(
-          (employeePerShift) => {
-            // Return a random employee
-            return employeeArray[
-              Math.floor(Math.random() * employeeArray.length)
-            ];
-          }
-        );
-
-        // Return an object with the hours and employees per shift
-        return {
-          hour,
-          employeesPerShift,
-        };
-      });
-
-      // Return an object with the shift and hours
-      return {
-        shift,
-        hours,
-      };
+  // Create an array to store the shift schedule
+  const shiftSchedule: Shift[] = [];
+  for (let i = 0; i < totalShifts; i++) {
+    // Calculate the day of the week (1 = Monday, 7 = Sunday)
+    const dayOfWeek = (i % 7) + 1;
+    // Calculate the shift number (1 = first shift, 2 = second shift, etc.)
+    const shiftNumber = Math.floor(i / shiftsPerDay) + 1;
+    // Add the shift to the schedule
+    shiftSchedule.push({
+      employee: Math.floor(Math.random() * totalEmployees) + 1,
+      dayOfWeek,
+      shiftNumber,
+      hours: hoursPerShift,
     });
+  }
 
-    // Return an object with the employee and shifts
-    return {
-      employee: employee + 1,
-      shifts,
-    };
-  });
-
-  // Return the employee shifts
-  return employeeShifts;
+  return shiftSchedule;
 };
 
 export default generateShifts;
