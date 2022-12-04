@@ -15,8 +15,8 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import type { FieldValues } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
+import { trpc } from "../utils/trpc";
 import styles from "./settings.module.css";
 
 type Settings = {
@@ -44,7 +44,19 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
       employeesPerShift: 1,
     },
   });
-  const onSubmit = (data: FieldValues) => console.log(data);
+
+  const mutation = trpc.shift.generateShifts.useMutation();
+
+  const onSubmit = async (data: Settings) => {
+    const mutationData = await mutation.mutateAsync({
+      employees: parseInt(data.employees.toString()),
+      shifts: parseInt(data.shifts.toString()),
+      hours: parseInt(data.hours.toString()),
+      employeesPerShift: parseInt(data.employeesPerShift.toString()),
+    });
+
+    console.log(mutationData);
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
