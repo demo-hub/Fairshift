@@ -26,12 +26,20 @@ type Settings = {
   employeesPerShift: number;
 };
 
+type Shift = {
+  employee: number;
+  dayOfWeek: number;
+  shiftNumber: number;
+  hours: number;
+};
+
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: (shifts: Shift[]) => void;
 };
 
-const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
+const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
   const {
     handleSubmit,
     formState: { errors },
@@ -48,15 +56,14 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const mutation = trpc.shift.generateShifts.useMutation();
 
   const onSubmit = async (data: Settings) => {
-    console.log(data);
-    const mutationData = await mutation.mutateAsync({
+    const shifts = await mutation.mutateAsync({
       totalEmployees: parseInt(data.totalEmployees.toString()),
       shiftsPerDay: parseInt(data.shiftsPerDay.toString()),
       hoursPerShift: parseInt(data.hoursPerShift.toString()),
       employeesPerShift: parseInt(data.employeesPerShift.toString()),
     });
 
-    console.log(mutationData);
+    onSuccess(shifts);
   };
 
   return (
@@ -73,13 +80,14 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 <Controller
                   name="totalEmployees"
                   control={control}
-                  rules={{ required: true, min: 1 }}
+                  rules={{ required: true, min: 1, max: 5 }}
                   render={({ field }) => (
                     <NumberInput
                       focusBorderColor="purple.500"
                       errorBorderColor="red.500"
                       isInvalid={!!errors.totalEmployees}
                       min={1}
+                      max={5}
                       {...field}
                     >
                       <NumberInputField />

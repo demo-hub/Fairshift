@@ -3,9 +3,11 @@ import SettingsModal from "@components/SettingsModal";
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import styles from "./index.module.css";
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -31,7 +33,14 @@ const Home: NextPage = () => {
             <AuthShowcase />
           </div>
 
-          <SettingsModal isOpen={isOpen} onClose={onClose} />
+          <SettingsModal
+            isOpen={isOpen}
+            onClose={onClose}
+            onSuccess={(data) => {
+              sessionStorage.setItem("scheduleData", JSON.stringify(data));
+              router.push("/schedule");
+            }}
+          />
         </div>
       </main>
     </>

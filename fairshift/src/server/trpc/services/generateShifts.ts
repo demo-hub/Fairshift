@@ -22,6 +22,7 @@ const generateShifts = async ({
   // Check that the inputs are valid
   if (
     totalEmployees <= 0 ||
+    totalEmployees > 5 ||
     shiftsPerDay <= 0 ||
     hoursPerShift <= 0 ||
     employeesPerShift <= 0
