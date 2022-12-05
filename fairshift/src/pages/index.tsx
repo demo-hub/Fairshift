@@ -10,33 +10,29 @@ const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>
-            Fair<span className={styles.pinkSpan}>Shift</span>
-          </h1>
-          <div className={styles.cardRow}>
-            <div className={styles.card} onClick={onOpen}>
-              <h3 className={styles.cardTitle}>Generate schedule →</h3>
-              <div className={styles.cardText}>
-                Automatic schedule generation based on your preferences.
-              </div>
-            </div>
+      <h1 className={styles.title}>
+        Fair<span className={styles.pinkSpan}>Shift</span>
+      </h1>
+      <div className={styles.cardRow}>
+        <div className={styles.card} onClick={onOpen}>
+          <h3 className={styles.cardTitle}>Generate schedule →</h3>
+          <div className={styles.cardText}>
+            Automatic schedule generation based on your preferences.
           </div>
-          <div className={styles.showcaseContainer}>
-            <AuthShowcase />
-          </div>
-
-          <SettingsModal
-            isOpen={isOpen}
-            onClose={onClose}
-            onSuccess={(data) => {
-              sessionStorage.setItem("scheduleData", JSON.stringify(data));
-              router.push("/schedule");
-            }}
-          />
         </div>
-      </main>
+      </div>
+      <div className={styles.showcaseContainer}>
+        <AuthShowcase />
+      </div>
+
+      <SettingsModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSuccess={(data) => {
+          sessionStorage.setItem("scheduleData", JSON.stringify(data));
+          router.push("/schedule");
+        }}
+      />
     </>
   );
 };

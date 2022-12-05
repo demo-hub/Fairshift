@@ -47,63 +47,58 @@ const Schedule: NextPage = () => {
 
   return (
     <>
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>
-            Fair<span className={styles.pinkSpan}>Shift</span>
-          </h1>
-          <Card className={scheduleStyles.card}>
-            <CardBody>
-              <TableContainer>
-                <Table variant="simple">
-                  <TableCaption>
-                    Generated schedule based on your preferences.
-                  </TableCaption>
-                  <Thead>
-                    <Tr>
-                      <Th></Th>
-                      {DAYS_OF_WEEK.map((day) => (
-                        <Th key={day}>{day}</Th>
-                      ))}
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {employees.map((employee) => (
-                      <Tr key={employee}>
-                        <Td>Employee {employee}</Td>
-                        {DAYS_OF_WEEK.map((day, dayIndex) => (
-                          <Td key={day}>
-                            {scheduleData
-                              .filter(
-                                (shift) =>
-                                  shift.employee === employee &&
-                                  shift.dayOfWeek === dayIndex + 1
-                              )
-                              .map((shift) => (
-                                <div key={shift.shiftNumber}>
-                                  Shift {shift.shiftNumber} - {shift.hours}{" "}
-                                  hours
-                                </div>
-                              ))}
-                          </Td>
-                        ))}
-                      </Tr>
+      <h1 className={styles.title}>
+        Fair<span className={styles.pinkSpan}>Shift</span>
+      </h1>
+      <Card className={scheduleStyles.card}>
+        <CardBody>
+          <TableContainer>
+            <Table variant="simple">
+              <TableCaption>
+                Generated schedule based on your preferences.
+              </TableCaption>
+              <Thead>
+                <Tr>
+                  <Th></Th>
+                  {DAYS_OF_WEEK.map((day) => (
+                    <Th key={day}>{day}</Th>
+                  ))}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {employees.map((employee) => (
+                  <Tr key={employee}>
+                    <Td>Employee {employee}</Td>
+                    {DAYS_OF_WEEK.map((day, dayIndex) => (
+                      <Td key={day}>
+                        {scheduleData
+                          .filter(
+                            (shift) =>
+                              shift.employee === employee &&
+                              shift.dayOfWeek === dayIndex + 1
+                          )
+                          .map((shift) => (
+                            <div key={shift.shiftNumber}>
+                              Shift {shift.shiftNumber} - {shift.hours} hours
+                            </div>
+                          ))}
+                      </Td>
                     ))}
-                  </Tbody>
-                  <Tfoot>
-                    <Tr>
-                      <Th></Th>
-                      {DAYS_OF_WEEK.map((day) => (
-                        <Th key={day}>{day}</Th>
-                      ))}
-                    </Tr>
-                  </Tfoot>
-                </Table>
-              </TableContainer>
-            </CardBody>
-          </Card>
-        </div>
-      </main>
+                  </Tr>
+                ))}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th></Th>
+                  {DAYS_OF_WEEK.map((day) => (
+                    <Th key={day}>{day}</Th>
+                  ))}
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
+        </CardBody>
+      </Card>
     </>
   );
 };
