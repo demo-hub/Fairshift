@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
-import styles from "./index.module.css";
+import { pinkSpan, title } from "./index.css";
 import { card } from "./schedule.css";
 
 const DAYS_OF_WEEK = [
@@ -47,8 +47,8 @@ const Schedule: NextPage = () => {
 
   return (
     <>
-      <h1 className={styles.title}>
-        Fair<span className={styles.pinkSpan}>Shift</span>
+      <h1 className={title}>
+        Fair<span className={pinkSpan}>Shift</span>
       </h1>
       <Card className={card}>
         <CardBody>
