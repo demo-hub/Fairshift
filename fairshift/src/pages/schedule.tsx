@@ -14,7 +14,7 @@ import {
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
-import scheduleStyles from "./schedule.module.css";
+import { card } from "./schedule.css";
 
 const DAYS_OF_WEEK = [
   "Monday",
@@ -50,7 +50,7 @@ const Schedule: NextPage = () => {
       <h1 className={styles.title}>
         Fair<span className={styles.pinkSpan}>Shift</span>
       </h1>
-      <Card className={scheduleStyles.card}>
+      <Card className={card}>
         <CardBody>
           <TableContainer>
             <Table variant="simple">
