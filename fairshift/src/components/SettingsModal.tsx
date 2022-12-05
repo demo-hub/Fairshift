@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
 import { trpc } from "../utils/trpc";
-import styles from "./settings.module.css";
+import { form, row } from "./settings.css";
 
 type Settings = {
   totalEmployees: number;
@@ -73,8 +73,8 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
         <ModalHeader>Settings</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Stack spacing={8} className={styles.form}>
-            <div className={styles.row}>
+          <Stack spacing={8} className={form}>
+            <div className={row}>
               <span>
                 <Text mb="8px">Employees</Text>
                 <Controller
@@ -133,7 +133,7 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
                 </span>
               </span>
             </div>
-            <div className={styles.row}>
+            <div className={row}>
               <span>
                 <Text mb="8px">Hours per shift</Text>
                 <Controller

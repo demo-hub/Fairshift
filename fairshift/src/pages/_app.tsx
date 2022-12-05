@@ -4,11 +4,10 @@ import { type AppType } from "next/app";
 
 import { trpc } from "../utils/trpc";
 
-import "../styles/globals.css";
-
 // 1. import `ChakraProvider` component
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
+import { container, main } from "../styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -22,8 +21,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <meta name="description" content="FairShift" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <main className="main">
-          <div className="container">
+        <main className={main}>
+          <div className={container}>
             <Component {...pageProps} />
           </div>
         </main>
