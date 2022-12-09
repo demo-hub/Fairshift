@@ -13,8 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
-import { pinkSpan, title } from "./index.css";
-import { card } from "./schedule.css";
+import { pinkSpan, title } from "../styles/index.css";
+import { card } from "../styles/schedule.css";
 
 const DAYS_OF_WEEK = [
   "Monday",

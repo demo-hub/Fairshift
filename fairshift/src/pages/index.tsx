@@ -13,7 +13,7 @@ import {
   pinkSpan,
   showcaseContainer,
   title,
-} from "./index.css";
+} from "../styles/index.css";
 
 const Home: NextPage = () => {
   const router = useRouter();
