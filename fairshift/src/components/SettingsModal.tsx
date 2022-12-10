@@ -7,16 +7,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
 import { trpc } from "../utils/trpc";
+import NumericInput from "./Input/NumericInput";
 import { form, row } from "./settings.css";
 
 type Settings = {
@@ -82,20 +78,12 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
                   control={control}
                   rules={{ required: true, min: 1, max: 5 }}
                   render={({ field }) => (
-                    <NumberInput
-                      focusBorderColor="purple.500"
-                      errorBorderColor="red.500"
+                    <NumericInput
                       isInvalid={!!errors.totalEmployees}
                       min={1}
                       max={5}
                       {...field}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
+                    />
                   )}
                 />
                 <span>
@@ -111,19 +99,11 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
                   control={control}
                   rules={{ required: true, min: 1 }}
                   render={({ field }) => (
-                    <NumberInput
-                      focusBorderColor="purple.500"
-                      errorBorderColor="red.500"
+                    <NumericInput
                       isInvalid={!!errors.employeesPerShift}
                       min={1}
                       {...field}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
+                    />
                   )}
                 />
                 <span>
@@ -141,19 +121,11 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
                   control={control}
                   rules={{ required: true, min: 1 }}
                   render={({ field }) => (
-                    <NumberInput
-                      focusBorderColor="purple.500"
-                      errorBorderColor="red.500"
+                    <NumericInput
                       isInvalid={!!errors.hoursPerShift}
                       min={1}
                       {...field}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
+                    />
                   )}
                 />
                 <span>
@@ -169,19 +141,11 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
                   control={control}
                   rules={{ required: true, min: 1 }}
                   render={({ field }) => (
-                    <NumberInput
-                      focusBorderColor="purple.500"
-                      errorBorderColor="red.500"
+                    <NumericInput
                       isInvalid={!!errors.shiftsPerDay}
                       min={1}
                       {...field}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
+                    />
                   )}
                 />
                 <span>
