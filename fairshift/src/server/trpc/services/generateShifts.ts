@@ -3,6 +3,7 @@ type Props = {
   shiftsPerDay: number;
   hoursPerShift: number;
   employeesPerShift: number;
+  includeWeekends: boolean;
 };
 
 type Shift = {
@@ -18,6 +19,7 @@ const generateShifts = async ({
   shiftsPerDay,
   hoursPerShift,
   employeesPerShift,
+  includeWeekends,
 }: Props): Promise<Shift[]> => {
   // Check that the inputs are valid
   if (
@@ -30,14 +32,17 @@ const generateShifts = async ({
     return [];
   }
 
+  // Number of days
+  const days = includeWeekends ? 7 : 5;
+
   // Calculate the total number of shifts in a week
-  const totalShifts = shiftsPerDay * 7;
+  const totalShifts = shiftsPerDay * days;
 
   // Create an array to store the shift schedule
   const shiftSchedule: Shift[] = [];
   for (let i = 0; i < totalShifts; i++) {
     // Calculate the day of the week (1 = Monday, 7 = Sunday)
-    const dayOfWeek = (i % 7) + 1;
+    const dayOfWeek = (i % days) + 1;
     // Calculate the shift number (1 = first shift, 2 = second shift, etc.)
     const shiftNumber =
       shiftSchedule.filter((s) => s.dayOfWeek === dayOfWeek).length /

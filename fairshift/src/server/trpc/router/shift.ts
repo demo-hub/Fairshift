@@ -11,6 +11,7 @@ export const shiftRouter = router({
         shiftsPerDay: z.number(),
         hoursPerShift: z.number(),
         employeesPerShift: z.number(),
+        includeWeekends: z.boolean(),
       })
     )
     .mutation(({ input }) => {

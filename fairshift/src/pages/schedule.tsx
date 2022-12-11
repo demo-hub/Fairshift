@@ -45,6 +45,11 @@ const Schedule: NextPage = () => {
   // Sort employees in ascending order
   employees.sort((a, b) => a - b);
 
+  // Remove days of the week that are not included in the schedule
+  const daysOfWeek = [
+    ...new Set(scheduleData.map((shift) => DAYS_OF_WEEK[shift.dayOfWeek - 1])),
+  ];
+
   return (
     <>
       <h1 className={title}>
@@ -60,7 +65,7 @@ const Schedule: NextPage = () => {
               <Thead>
                 <Tr>
                   <Th></Th>
-                  {DAYS_OF_WEEK.map((day) => (
+                  {daysOfWeek.map((day) => (
                     <Th key={day}>{day}</Th>
                   ))}
                 </Tr>
@@ -69,7 +74,7 @@ const Schedule: NextPage = () => {
                 {employees.map((employee) => (
                   <Tr key={employee}>
                     <Td>Employee {employee}</Td>
-                    {DAYS_OF_WEEK.map((day, dayIndex) => (
+                    {daysOfWeek.map((day, dayIndex) => (
                       <Td key={day}>
                         {scheduleData
                           .filter(
@@ -90,7 +95,7 @@ const Schedule: NextPage = () => {
               <Tfoot>
                 <Tr>
                   <Th></Th>
-                  {DAYS_OF_WEEK.map((day) => (
+                  {daysOfWeek.map((day) => (
                     <Th key={day}>{day}</Th>
                   ))}
                 </Tr>

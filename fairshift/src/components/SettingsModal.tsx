@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,6 +21,7 @@ type Settings = {
   shiftsPerDay: number;
   hoursPerShift: number;
   employeesPerShift: number;
+  includeWeekends: boolean;
 };
 
 type Shift = {
@@ -46,17 +48,20 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
       shiftsPerDay: 1,
       hoursPerShift: 1,
       employeesPerShift: 1,
+      includeWeekends: false,
     },
   });
 
   const mutation = trpc.shift.generateShifts.useMutation();
 
   const onSubmit = async (data: Settings) => {
+    console.log(data);
     const shifts = await mutation.mutateAsync({
       totalEmployees: parseInt(data.totalEmployees.toString()),
       shiftsPerDay: parseInt(data.shiftsPerDay.toString()),
       hoursPerShift: parseInt(data.hoursPerShift.toString()),
       employeesPerShift: parseInt(data.employeesPerShift.toString()),
+      includeWeekends: data.includeWeekends,
     });
 
     onSuccess(shifts);
@@ -154,6 +159,22 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
                     : undefined}
                 </span>
               </span>
+            </div>
+            <div className={row}>
+              <Controller
+                name="includeWeekends"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    {...field}
+                    defaultChecked={!!field.value}
+                    colorScheme="purple"
+                    value={field.value ? 1 : 0}
+                  >
+                    Include weekends
+                  </Checkbox>
+                )}
+              />
             </div>
           </Stack>
         </ModalBody>
