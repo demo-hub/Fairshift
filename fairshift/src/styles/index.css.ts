@@ -16,7 +16,7 @@ export const title = style({
 });
 
 export const pinkSpan = style({
-  color: "#ff007a",
+  color: "#da627d",
 });
 
 export const cardRow = style({
