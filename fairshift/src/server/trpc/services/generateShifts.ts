@@ -44,10 +44,7 @@ const generateShifts = async ({
     // Calculate the day of the week (1 = Monday, 7 = Sunday)
     const dayOfWeek = (i % days) + 1;
     // Calculate the shift number (1 = first shift, 2 = second shift, etc.)
-    const shiftNumber =
-      shiftSchedule.filter((s) => s.dayOfWeek === dayOfWeek).length /
-        employeesPerShift +
-      1;
+    const shiftNumber = Math.floor(i / days) + 1;
     // Select random employees for the shift
     const employeeArray = Array.from(Array(totalEmployees).keys());
     // Shuffle array

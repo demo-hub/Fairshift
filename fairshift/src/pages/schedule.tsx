@@ -1,6 +1,8 @@
+import { DownloadIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardBody,
+  IconButton,
   Table,
   TableCaption,
   TableContainer,
@@ -11,6 +13,8 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
 import { pinkSpan, title } from "../styles/index.css";
@@ -50,6 +54,22 @@ const Schedule: NextPage = () => {
     ...new Set(scheduleData.map((shift) => DAYS_OF_WEEK[shift.dayOfWeek - 1])),
   ];
 
+  const generatePdf = async () => {
+    // Initialize jsPDF
+    const doc = new jsPDF();
+
+    // It can parse html:
+    // <table id="my-table"><!-- ... --></table>
+    autoTable(doc, {
+      html: "#schedule",
+      headStyles: { fillColor: "#2e026d" },
+      theme: "grid",
+    });
+
+    // Download the PDF
+    doc.save("Schedule.pdf");
+  };
+
   return (
     <>
       <h1 className={title}>
@@ -58,9 +78,16 @@ const Schedule: NextPage = () => {
       <Card className={card}>
         <CardBody>
           <TableContainer>
-            <Table variant="simple">
+            <Table variant="simple" id="schedule">
               <TableCaption>
                 Generated schedule based on your preferences.
+                <IconButton
+                  variant="ghost"
+                  colorScheme="purple"
+                  aria-label="Download"
+                  icon={<DownloadIcon />}
+                  onClick={generatePdf}
+                />
               </TableCaption>
               <Thead>
                 <Tr>
@@ -73,7 +100,7 @@ const Schedule: NextPage = () => {
               <Tbody>
                 {employees.map((employee) => (
                   <Tr key={employee}>
-                    <Td>Employee {employee}</Td>
+                    <Th>Employee {employee}</Th>
                     {daysOfWeek.map((day, dayIndex) => (
                       <Td key={day}>
                         {scheduleData
@@ -83,23 +110,16 @@ const Schedule: NextPage = () => {
                               shift.dayOfWeek === dayIndex + 1
                           )
                           .map((shift) => (
-                            <div key={shift.shiftNumber}>
-                              Shift {shift.shiftNumber} - {shift.hours} hours
-                            </div>
+                            <p key={shift.shiftNumber}>
+                              Shift {shift.shiftNumber} ({shift.hours}h)
+                            </p>
                           ))}
                       </Td>
                     ))}
                   </Tr>
                 ))}
               </Tbody>
-              <Tfoot>
-                <Tr>
-                  <Th></Th>
-                  {daysOfWeek.map((day) => (
-                    <Th key={day}>{day}</Th>
-                  ))}
-                </Tr>
-              </Tfoot>
+              <Tfoot></Tfoot>
             </Table>
           </TableContainer>
         </CardBody>
