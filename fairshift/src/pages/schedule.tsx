@@ -1,34 +1,19 @@
-import { DownloadIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardBody,
-  IconButton,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from "@chakra-ui/react";
+import ScheduleTable from "@components/ScheduleTable";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { type NextPage } from "next";
 import { useEffect, useState } from "react";
 import { pinkSpan, title } from "../styles/index.css";
 import { card } from "../styles/schedule.css";
-
-const DAYS_OF_WEEK = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
 
 type Shift = {
   employee: number;
@@ -39,6 +24,7 @@ type Shift = {
 
 const Schedule: NextPage = () => {
   const [scheduleData, setScheduleData] = useState<Shift[]>([]);
+  const [view, setView] = useState<"employee" | "shift">("employee");
 
   useEffect(() => {
     setScheduleData(JSON.parse(sessionStorage.getItem("scheduleData") || "[]"));
@@ -49,10 +35,7 @@ const Schedule: NextPage = () => {
   // Sort employees in ascending order
   employees.sort((a, b) => a - b);
 
-  // Remove days of the week that are not included in the schedule
-  const daysOfWeek = [
-    ...new Set(scheduleData.map((shift) => DAYS_OF_WEEK[shift.dayOfWeek - 1])),
-  ];
+  const shifts = [...new Set(scheduleData.map((shift) => shift.shiftNumber))];
 
   const generatePdf = async () => {
     // Initialize jsPDF
@@ -61,7 +44,7 @@ const Schedule: NextPage = () => {
     // It can parse html:
     // <table id="my-table"><!-- ... --></table>
     autoTable(doc, {
-      html: "#schedule",
+      html: `#${view}`,
       headStyles: { fillColor: "#2e026d" },
       theme: "grid",
     });
@@ -75,55 +58,40 @@ const Schedule: NextPage = () => {
       <h1 className={title}>
         Fair<span className={pinkSpan}>Shift</span>
       </h1>
-      <Card className={card}>
-        <CardBody>
-          <TableContainer>
-            <Table variant="simple" id="schedule">
-              <TableCaption>
-                Generated schedule based on your preferences.
-                <IconButton
-                  variant="ghost"
-                  colorScheme="purple"
-                  aria-label="Download"
-                  icon={<DownloadIcon />}
-                  onClick={generatePdf}
+      <Tabs variant="soft-rounded" colorScheme="purple" align="center">
+        <TabList>
+          <Tab onClick={() => setView("employee")}>By Employee</Tab>
+          <Tab onClick={() => setView("shift")}>By Shift</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Card className={card}>
+              <CardBody>
+                <ScheduleTable
+                  scheduleData={scheduleData}
+                  employees={employees}
+                  generatePdf={generatePdf}
+                  shifts={shifts}
+                  view="employee"
                 />
-              </TableCaption>
-              <Thead>
-                <Tr>
-                  <Th></Th>
-                  {daysOfWeek.map((day) => (
-                    <Th key={day}>{day}</Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {employees.map((employee) => (
-                  <Tr key={employee}>
-                    <Th>Employee {employee}</Th>
-                    {daysOfWeek.map((day, dayIndex) => (
-                      <Td key={day}>
-                        {scheduleData
-                          .filter(
-                            (shift) =>
-                              shift.employee === employee &&
-                              shift.dayOfWeek === dayIndex + 1
-                          )
-                          .map((shift) => (
-                            <p key={shift.shiftNumber}>
-                              Shift {shift.shiftNumber} ({shift.hours}h)
-                            </p>
-                          ))}
-                      </Td>
-                    ))}
-                  </Tr>
-                ))}
-              </Tbody>
-              <Tfoot></Tfoot>
-            </Table>
-          </TableContainer>
-        </CardBody>
-      </Card>
+              </CardBody>
+            </Card>
+          </TabPanel>
+          <TabPanel>
+            <Card className={card}>
+              <CardBody>
+                <ScheduleTable
+                  scheduleData={scheduleData}
+                  employees={employees}
+                  generatePdf={generatePdf}
+                  shifts={shifts}
+                  view="shift"
+                />
+              </CardBody>
+            </Card>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </>
   );
 };
