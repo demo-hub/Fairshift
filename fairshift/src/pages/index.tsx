@@ -1,17 +1,13 @@
 import { useDisclosure } from "@chakra-ui/react";
 import SettingsModal from "@components/SettingsModal";
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
-  authContainer,
   card,
   cardRow,
   cardText,
   cardTitle,
-  loginButton,
   pinkSpan,
-  showcaseContainer,
   title,
 } from "../styles/index.css";
 
@@ -31,9 +27,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className={showcaseContainer}>
-        <AuthShowcase />
-      </div>
 
       <SettingsModal
         isOpen={isOpen}
@@ -48,18 +41,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  return (
-    <div className={authContainer}>
-      <button
-        className={loginButton}
-        onClick={sessionData ? () => signOut() : () => signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
-};
