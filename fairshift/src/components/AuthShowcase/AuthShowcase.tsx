@@ -5,13 +5,19 @@ import {
   IconButton,
   Text,
   Tooltip,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
+import TeamModal from "@components/Modal/TeamModal";
 import type { Team } from "@prisma/client";
 import Avatar from "boring-avatars";
 import type { Session, User } from "next-auth";
 import { signIn, signOut } from "next-auth/react";
-import Link from "next/link";
-import { authContainer, userContainer } from "./authShowcase.css";
+import {
+  authContainer,
+  teamContainer,
+  userContainer,
+} from "./authShowcase.css";
 
 type Props = {
   user:
@@ -21,9 +27,17 @@ type Props = {
     | null
     | undefined;
   sessionData: Session | null | undefined;
+  onTeamCreated: (team: Team) => void;
 };
 
-const AuthShowcase: React.FC<Props> = ({ user, sessionData }) => {
+const AuthShowcase: React.FC<Props> = ({
+  user,
+  sessionData,
+  onTeamCreated,
+}) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
   return (
     <>
       {sessionData ? (
@@ -41,9 +55,29 @@ const AuthShowcase: React.FC<Props> = ({ user, sessionData }) => {
             )}
             <div>
               <Text color="white">{sessionData.user?.name}</Text>
-              <Link href="/profile">
+              <div
+                className={teamContainer}
+                onClick={() => {
+                  if (!user?.team?.name) {
+                    onOpen();
+                  } else {
+                    navigator.clipboard.writeText(
+                      `${window.location.origin}/invite/${user?.team?.id}`
+                    );
+
+                    toast({
+                      title: "Invitation link copied to clipboard.",
+                      description:
+                        "Share this link with your team members to invite them to your team.",
+                      status: "success",
+                      duration: 9000,
+                      isClosable: true,
+                    });
+                  }
+                }}
+              >
                 <Text color="pink">{user?.team?.name ?? "Create Team"}</Text>
-              </Link>
+              </div>
             </div>
           </div>
           <Tooltip label="Sign out">
@@ -63,6 +97,15 @@ const AuthShowcase: React.FC<Props> = ({ user, sessionData }) => {
           </Button>
         </div>
       )}
+
+      <TeamModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSuccess={(team) => {
+          onTeamCreated(team);
+          onClose();
+        }}
+      />
     </>
   );
 };

@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   const { data: sessionData } = useSession();
 
   // Fetch user team from database
-  const { data: user } = trpc.team.getUserTeam.useQuery(
+  const { data: user, refetch } = trpc.team.getUserTeam.useQuery(
     {
       userId: sessionData?.user?.id ?? "",
     },
@@ -43,7 +43,11 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className={showcaseContainer}>
-        <AuthShowcase user={user} sessionData={sessionData} />
+        <AuthShowcase
+          user={user}
+          sessionData={sessionData}
+          onTeamCreated={() => refetch()}
+        />
       </div>
 
       <SettingsModal

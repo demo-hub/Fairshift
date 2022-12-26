@@ -15,4 +15,25 @@ export const teamRouter = router({
         },
       });
     }),
+  createTeam: protectedProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const team = await ctx.prisma.team.create({
+        data: {
+          name: input.name,
+          ownerId: ctx.session.user.id,
+        },
+      });
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          teamId: team.id,
+        },
+      });
+
+      return team;
+    }),
 });

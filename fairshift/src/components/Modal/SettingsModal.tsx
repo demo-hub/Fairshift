@@ -55,7 +55,6 @@ const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
   const mutation = trpc.shift.generateShifts.useMutation();
 
   const onSubmit = async (data: Settings) => {
-    console.log(data);
     const shifts = await mutation.mutateAsync({
       totalEmployees: parseInt(data.totalEmployees.toString()),
       shiftsPerDay: parseInt(data.shiftsPerDay.toString()),

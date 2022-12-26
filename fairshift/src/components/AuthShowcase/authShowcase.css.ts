@@ -13,3 +13,7 @@ export const userContainer = style({
   alignItems: "center",
   gap: "0.5rem",
 });
+
+export const teamContainer = style({
+  cursor: "pointer",
+});
