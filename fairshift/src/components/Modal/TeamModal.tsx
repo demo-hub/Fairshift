@@ -8,13 +8,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import type { Team } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
-import { form, row } from "./settings.css";
+import { row } from "./settings.css";
 
 type TeamForm = {
   name: string;
@@ -54,29 +53,27 @@ const TeamModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
         <ModalHeader>Create Team</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Stack spacing={8} className={form}>
-            <div className={row}>
+          <div className={row}>
+            <span>
+              <Text mb="8px">Name</Text>
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Input
+                    focusBorderColor="purple.500"
+                    errorBorderColor="red.500"
+                    isInvalid={!!errors.name}
+                    {...field}
+                  />
+                )}
+              />
               <span>
-                <Text mb="8px">Name</Text>
-                <Controller
-                  name="name"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Input
-                      focusBorderColor="purple.500"
-                      errorBorderColor="red.500"
-                      isInvalid={!!errors.name}
-                      {...field}
-                    />
-                  )}
-                />
-                <span>
-                  {errors.name ? errors.name?.message?.toString() : undefined}
-                </span>
+                {errors.name ? errors.name?.message?.toString() : undefined}
               </span>
-            </div>
-          </Stack>
+            </span>
+          </div>
         </ModalBody>
 
         <ModalFooter>
