@@ -82,16 +82,8 @@ export const authContainer = style({
   justifyContent: "center",
 });
 
-export const loginButton = style({
-  backgroundColor: "rgb(255 255 255 / 0.1)",
-  padding: "0.75rem 2.5rem",
-  borderRadius: "9999px",
-  color: "white",
-  fontWeight: 600,
-  textDecorationLine: "none",
-  transition: "background-color 150ms cubic-bezier(0.5, 0, 0.2, 1)",
-
-  ":hover": {
-    backgroundColor: "rgb(255 255 255 / 0.2)",
-  },
+export const userContainer = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "0.5rem",
 });

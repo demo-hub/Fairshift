@@ -22,6 +22,7 @@
     "@trpc/react-query": "^10.0.0",
     "@trpc/server": "^10.0.0",
     "@vanilla-extract/css": "^1.9.2",
+    "boring-avatars": "^1.7.0",
     "framer-motion": "^7.6.17",
     "html-to-image": "^1.11.3",
     "jspdf": "^2.5.1",

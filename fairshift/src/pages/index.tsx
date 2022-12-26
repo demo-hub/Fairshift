@@ -1,14 +1,27 @@
-import { useDisclosure } from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import {
+  Avatar as ChakraAvatar,
+  Button,
+  IconButton,
+  Text,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 import SettingsModal from "@components/SettingsModal";
+import Avatar from "boring-avatars";
 import { type NextPage } from "next";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
+  authContainer,
   card,
   cardRow,
   cardText,
   cardTitle,
   pinkSpan,
+  showcaseContainer,
   title,
+  userContainer,
 } from "../styles/index.css";
 
 const Home: NextPage = () => {
@@ -27,6 +40,9 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
+      <div className={showcaseContainer}>
+        <AuthShowcase />
+      </div>
 
       <SettingsModal
         isOpen={isOpen}
@@ -41,3 +57,44 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+const AuthShowcase: React.FC = () => {
+  const { data: sessionData } = useSession();
+
+  console.log(sessionData?.user?.image);
+
+  return (
+    <>
+      {sessionData ? (
+        <div className={userContainer}>
+          {sessionData.user?.image ? (
+            <ChakraAvatar name="User" src={sessionData.user?.image} />
+          ) : (
+            <Avatar
+              size={40}
+              name="User"
+              variant="sunset"
+              colors={["#da627d", "#2e026d"]}
+            />
+          )}
+          <Text color="white">{sessionData.user?.name}</Text>
+          <Tooltip label="Sign out">
+            <IconButton
+              onClick={() => signOut()}
+              colorScheme="whiteAlpha"
+              variant="ghost"
+              aria-label="Search database"
+              icon={<ArrowForwardIcon />}
+            />
+          </Tooltip>
+        </div>
+      ) : (
+        <div className={authContainer}>
+          <Button colorScheme="purple" onClick={() => signIn()}>
+            Sign In
+          </Button>
+        </div>
+      )}
+    </>
+  );
+};
