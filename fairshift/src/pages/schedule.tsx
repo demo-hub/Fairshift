@@ -7,7 +7,7 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import ScheduleTable from "@components/ScheduleTable";
+import ScheduleTable from "@components/ScheduleTable/ScheduleTable";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { type NextPage } from "next";

@@ -12,8 +12,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
-import { trpc } from "../utils/trpc";
-import NumericInput from "./Input/NumericInput";
+import { trpc } from "../../utils/trpc";
+import NumericInput from "../Input/NumericInput";
 import { form, row } from "./settings.css";
 
 type Settings = {

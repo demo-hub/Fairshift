@@ -1,19 +1,10 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import {
-  Avatar as ChakraAvatar,
-  Button,
-  IconButton,
-  Text,
-  Tooltip,
-  useDisclosure,
-} from "@chakra-ui/react";
-import SettingsModal from "@components/SettingsModal";
-import Avatar from "boring-avatars";
+import { useDisclosure } from "@chakra-ui/react";
+import AuthShowcase from "@components/AuthShowcase/AuthShowcase";
+import SettingsModal from "@components/Modal/SettingsModal";
 import { type NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
-  authContainer,
   card,
   cardRow,
   cardText,
@@ -21,12 +12,23 @@ import {
   pinkSpan,
   showcaseContainer,
   title,
-  userContainer,
 } from "../styles/index.css";
+import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { data: sessionData } = useSession();
+
+  // Fetch user team from database
+  const { data: user } = trpc.team.getUserTeam.useQuery(
+    {
+      userId: sessionData?.user?.id ?? "",
+    },
+    { enabled: !!sessionData?.user?.id }
+  );
+
   return (
     <>
       <h1 className={title}>
@@ -41,7 +43,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className={showcaseContainer}>
-        <AuthShowcase />
+        <AuthShowcase user={user} sessionData={sessionData} />
       </div>
 
       <SettingsModal
@@ -57,44 +59,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
-
-  console.log(sessionData?.user?.image);
-
-  return (
-    <>
-      {sessionData ? (
-        <div className={userContainer}>
-          {sessionData.user?.image ? (
-            <ChakraAvatar name="User" src={sessionData.user?.image} />
-          ) : (
-            <Avatar
-              size={40}
-              name="User"
-              variant="sunset"
-              colors={["#da627d", "#2e026d"]}
-            />
-          )}
-          <Text color="white">{sessionData.user?.name}</Text>
-          <Tooltip label="Sign out">
-            <IconButton
-              onClick={() => signOut()}
-              colorScheme="whiteAlpha"
-              variant="ghost"
-              aria-label="Search database"
-              icon={<ArrowForwardIcon />}
-            />
-          </Tooltip>
-        </div>
-      ) : (
-        <div className={authContainer}>
-          <Button colorScheme="purple" onClick={() => signIn()}>
-            Sign In
-          </Button>
-        </div>
-      )}
-    </>
-  );
-};

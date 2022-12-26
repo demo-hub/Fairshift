@@ -73,17 +73,3 @@ export const showcaseText = style({
   textAlign: "center",
   lineHeight: 2,
 });
-
-export const authContainer = style({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "1rem",
-  justifyContent: "center",
-});
-
-export const userContainer = style({
-  display: "flex",
-  alignItems: "center",
-  gap: "0.5rem",
-});
