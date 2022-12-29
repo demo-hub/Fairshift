@@ -48,4 +48,13 @@ export const teamRouter = router({
         },
       });
     }),
+  getTeamMembers: protectedProcedure
+    .input(z.object({ teamId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.user.findMany({
+        where: {
+          teamId: input.teamId,
+        },
+      });
+    }),
 });

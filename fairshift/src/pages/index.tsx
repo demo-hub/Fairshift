@@ -1,7 +1,7 @@
 import { useDisclosure } from "@chakra-ui/react";
 import AuthShowcase from "@components/AuthShowcase/AuthShowcase";
 import SettingsModal from "@components/Modal/SettingsModal";
-import { type NextPage } from "next";
+import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import {
@@ -29,6 +29,12 @@ const Home: NextPage = () => {
     { enabled: !!sessionData?.user?.id }
   );
 
+  // Get team members
+  const { data: teamMembers } = trpc.team.getTeamMembers.useQuery(
+    { teamId: user?.team?.id ?? "" },
+    { enabled: !!user?.team?.id }
+  );
+
   return (
     <>
       <h1 className={title}>
@@ -47,6 +53,7 @@ const Home: NextPage = () => {
           user={user}
           sessionData={sessionData}
           onTeamCreated={() => refetch()}
+          teamMembers={teamMembers}
         />
       </div>
 
@@ -57,6 +64,7 @@ const Home: NextPage = () => {
           sessionStorage.setItem("scheduleData", JSON.stringify(data));
           router.push("/schedule");
         }}
+        teamMembers={teamMembers}
       />
     </>
   );

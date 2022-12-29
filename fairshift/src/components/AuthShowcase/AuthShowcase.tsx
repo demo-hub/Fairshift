@@ -28,12 +28,14 @@ type Props = {
     | undefined;
   sessionData: Session | null | undefined;
   onTeamCreated: (team: Team) => void;
+  teamMembers: User[] | undefined;
 };
 
 const AuthShowcase: React.FC<Props> = ({
   user,
   sessionData,
   onTeamCreated,
+  teamMembers,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -76,7 +78,10 @@ const AuthShowcase: React.FC<Props> = ({
                   }
                 }}
               >
-                <Text color="pink">{user?.team?.name ?? "Create Team"}</Text>
+                <Text color="pink">
+                  {user?.team?.name ?? "Create Team"} ({teamMembers?.length}{" "}
+                  members)
+                </Text>
               </div>
             </div>
           </div>

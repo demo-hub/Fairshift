@@ -11,6 +11,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import type { User } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { trpc } from "../../utils/trpc";
 import NumericInput from "../Input/NumericInput";
@@ -35,16 +36,22 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: (shifts: Shift[]) => void;
+  teamMembers: User[] | undefined;
 };
 
-const SettingsModal: React.FC<Props> = ({ isOpen, onClose, onSuccess }) => {
+const SettingsModal: React.FC<Props> = ({
+  isOpen,
+  onClose,
+  onSuccess,
+  teamMembers,
+}) => {
   const {
     handleSubmit,
     formState: { errors },
     control,
   } = useForm<Settings>({
     defaultValues: {
-      totalEmployees: 1,
+      totalEmployees: teamMembers?.length || 1,
       shiftsPerDay: 1,
       hoursPerShift: 1,
       employeesPerShift: 1,
