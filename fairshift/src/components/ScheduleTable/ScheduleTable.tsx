@@ -1,6 +1,7 @@
-import { DownloadIcon } from "@chakra-ui/icons";
+import { CheckIcon, DownloadIcon, EditIcon } from "@chakra-ui/icons";
 import {
   IconButton,
+  Input,
   Table,
   TableCaption,
   TableContainer,
@@ -9,8 +10,21 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
+import { useMemo, useState } from "react";
+
+const DAYS_OF_WEEK = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 type Shift = {
   employee: number;
@@ -34,20 +48,31 @@ const ScheduleTable: React.FC<Props> = ({
   view,
   shifts,
 }) => {
-  const DAYS_OF_WEEK = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
+  const [employeeNames, setEmployeeNames] = useState<string[]>(
+    employees.map((employee) => `Employee ${employee}`)
+  );
+
+  const [employeeEditMode, setEmployeeEditMode] = useState<boolean[]>([
+    ...employees.map(() => false),
+  ]);
+
+  const toast = useToast();
 
   // Remove days of the week that are not included in the schedule
-  const daysOfWeek = [
-    ...new Set(scheduleData.map((shift) => DAYS_OF_WEEK[shift.dayOfWeek - 1])),
-  ];
+  const daysOfWeek = useMemo(
+    () => [
+      ...new Set(
+        scheduleData.map((shift) => DAYS_OF_WEEK[shift.dayOfWeek - 1])
+      ),
+    ],
+    [scheduleData]
+  );
+
+  const changeName = (index: number, name: string) => {
+    const newEmployeeNames = [...employeeNames];
+    newEmployeeNames[index] = name;
+    setEmployeeNames(newEmployeeNames);
+  };
 
   return (
     <TableContainer>
@@ -72,9 +97,55 @@ const ScheduleTable: React.FC<Props> = ({
         </Thead>
         <Tbody>
           {view === "employee"
-            ? employees.map((employee) => (
+            ? employees.map((employee, index) => (
                 <Tr key={employee}>
-                  <Th>Employee {employee}</Th>
+                  <Th>
+                    <div key={employee} style={{ display: "flex" }}>
+                      {employeeEditMode[index] ? (
+                        <Input
+                          defaultValue={employeeNames[index]}
+                          focusBorderColor="purple.500"
+                          onChange={(e) => changeName(index, e.target.value)}
+                        ></Input>
+                      ) : (
+                        employeeNames[index]
+                      )}
+                      <Tooltip
+                        label={
+                          employeeEditMode[index] ? "Confirm" : "Edit name"
+                        }
+                      >
+                        <IconButton
+                          onClick={() => {
+                            setEmployeeEditMode([
+                              ...employeeEditMode.slice(0, index),
+                              !employeeEditMode[index],
+                              ...employeeEditMode.slice(index + 1),
+                            ]);
+
+                            if (employeeEditMode[index]) {
+                              toast({
+                                title: "Name changed.",
+                                status: "success",
+                                duration: 3000,
+                                isClosable: true,
+                              });
+                            }
+                          }}
+                          colorScheme="purple"
+                          variant="link"
+                          aria-label="Edit"
+                          icon={
+                            employeeEditMode[index] ? (
+                              <CheckIcon />
+                            ) : (
+                              <EditIcon />
+                            )
+                          }
+                        />
+                      </Tooltip>
+                    </div>
+                  </Th>
                   {daysOfWeek.map((day, dayIndex) => (
                     <Td key={day}>
                       {scheduleData
