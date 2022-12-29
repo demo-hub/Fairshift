@@ -37,7 +37,7 @@ const Schedule: NextPage = () => {
 
   const shifts = [...new Set(scheduleData.map((shift) => shift.shiftNumber))];
 
-  const generatePdf = async () => {
+  const generatePdf = async (view: "employee" | "shift") => {
     // Initialize jsPDF
     const doc = new jsPDF();
 
@@ -70,7 +70,7 @@ const Schedule: NextPage = () => {
                 <ScheduleTable
                   scheduleData={scheduleData}
                   employees={employees}
-                  generatePdf={generatePdf}
+                  generatePdf={() => generatePdf("employee")}
                   shifts={shifts}
                   view="employee"
                 />
@@ -83,7 +83,7 @@ const Schedule: NextPage = () => {
                 <ScheduleTable
                   scheduleData={scheduleData}
                   employees={employees}
-                  generatePdf={generatePdf}
+                  generatePdf={() => generatePdf("shift")}
                   shifts={shifts}
                   view="shift"
                 />
