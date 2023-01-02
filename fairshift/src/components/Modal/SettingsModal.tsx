@@ -51,7 +51,8 @@ const SettingsModal: React.FC<Props> = ({
     control,
   } = useForm<Settings>({
     defaultValues: {
-      totalEmployees: (teamMembers?.length || 1) > 5 ? 5 : teamMembers?.length,
+      totalEmployees:
+        (teamMembers?.length || 1) > 5 ? 5 : teamMembers?.length || 1,
       shiftsPerDay: 1,
       hoursPerShift: 1,
       employeesPerShift: 1,

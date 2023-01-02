@@ -51,10 +51,16 @@ const ScheduleTable: React.FC<Props> = ({
   const [employeeNames, setEmployeeNames] = useState<string[]>(
     employees.map((employee) => `Employee ${employee}`)
   );
+  if (employeeNames.length !== employees.length) {
+    setEmployeeNames(employees.map((employee) => `Employee ${employee}`));
+  }
 
   const [employeeEditMode, setEmployeeEditMode] = useState<boolean[]>([
     ...employees.map(() => false),
   ]);
+  if (employeeEditMode.length !== employees.length) {
+    setEmployeeEditMode([...employees.map(() => false)]);
+  }
 
   const toast = useToast();
 
@@ -72,6 +78,16 @@ const ScheduleTable: React.FC<Props> = ({
     const newEmployeeNames = [...employeeNames];
     newEmployeeNames[index] = name;
     setEmployeeNames(newEmployeeNames);
+
+    // Update the scheduleData with the new name
+    const newScheduleData = scheduleData.map((shift) => {
+      if (shift.employee === employees[index]) {
+        return { ...shift, employee: name };
+      }
+      return shift;
+    });
+
+    sessionStorage.setItem("scheduleData", JSON.stringify(newScheduleData));
   };
 
   return (
@@ -165,7 +181,7 @@ const ScheduleTable: React.FC<Props> = ({
               ))
             : shifts.map((shiftNumber) => (
                 <Tr key={shiftNumber}>
-                  <Th>Shift {shiftNumber}</Th>
+                  <Th>{shiftNumber}</Th>
                   {daysOfWeek.map((day, dayIndex) => (
                     <Td key={day}>
                       {scheduleData
@@ -176,7 +192,12 @@ const ScheduleTable: React.FC<Props> = ({
                         )
                         .map((shift) => (
                           <p key={shift.employee}>
-                            Employee {shift.employee} ({shift.hours}h)
+                            {
+                              employeeNames[
+                                employees.findIndex((e) => shift.employee === e)
+                              ]
+                            }{" "}
+                            ({shift.hours}h)
                           </p>
                         ))}
                     </Td>
