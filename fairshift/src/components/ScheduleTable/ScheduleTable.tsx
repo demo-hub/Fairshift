@@ -181,7 +181,7 @@ const ScheduleTable: React.FC<Props> = ({
               ))
             : shifts.map((shiftNumber) => (
                 <Tr key={shiftNumber}>
-                  <Th>{shiftNumber}</Th>
+                  <Th>Shift {shiftNumber}</Th>
                   {daysOfWeek.map((day, dayIndex) => (
                     <Td key={day}>
                       {scheduleData
